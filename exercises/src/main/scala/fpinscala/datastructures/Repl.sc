@@ -28,3 +28,5 @@ List.foldRightViaFoldLeft(l,0)(_+_)
 List.appendViaFoldRight(l,List(9,7))
 
 List.concatenate(List(List(1,2,3,4,5), List(9,8,7,6)))
+
+List.addOne(l)

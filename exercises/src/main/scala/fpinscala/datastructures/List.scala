@@ -121,6 +121,10 @@ object List {
   }
 
   def reverse2[A](l: List[A]): List[A] = foldLeft(l, Nil: List[A])((acc, x) => Cons(x, acc))
-  
+
+  def foldRightViaFoldLeft[A, B](as: List[A], z: B)(f: (A, B) => B): B = {
+    foldLeft(reverse(as), z)((b, a) => f(a, b))
+  }
+
   def map[A, B](l: List[A])(f: A => B): List[B] = sys.error("todo")
 }

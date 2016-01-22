@@ -142,4 +142,15 @@ object List {
 
 
   def mapViaFoldRight[A, B](l: List[A])(f: A => B): List[B] = foldRight(l, Nil: List[B])((x, acc) => Cons(f(x), acc))
+
+  def filter[A](l: List[A])(f: A => Boolean): List[A] =
+    l match {
+      case Nil => Nil
+      case Cons(x, xs) if f(x) =>Cons(x, filter(xs)(f))
+      case Cons(x, xs) => filter(xs)(f)
+    }
+
+  def filter2[A](l: List[A])(f: A => Boolean): List[A] =
+    foldRight(l, Nil: List[A])((x, acc) => if (f(x)) Cons(x, acc) else acc)
+
 }

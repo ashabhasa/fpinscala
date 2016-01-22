@@ -129,6 +129,9 @@ object List {
   def appendViaFoldRight[A](a1: List[A], a2: List[A]): List[A] =
     foldRight(a1, a2)((a, acc) => Cons(a, acc))
 
+  def concatenate[A](l: List[List[A]]): List[A] =
+    foldRight(l, Nil: List[A])((a, acc) => append(a, acc))
+
 
   def map[A, B](l: List[A])(f: A => B): List[B] = sys.error("todo")
 }

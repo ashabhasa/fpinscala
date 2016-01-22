@@ -134,5 +134,12 @@ object List {
 
   def addOne(l: List[Int]) = foldRight(l, Nil: List[Int])((x, acc) => Cons(x + 1, acc))
 
-  def map[A, B](l: List[A])(f: A => B): List[B] = sys.error("todo")
+  def map[A, B](l: List[A])(f: A => B): List[B] =
+    l match {
+      case Nil => Nil
+      case Cons(x, xs) => Cons(f(x), map(xs)(f))
+    }
+
+
+  def mapViaFoldRight[A, B](l: List[A])(f: A => B): List[B] = foldRight(l, Nil: List[B])((x, acc) => Cons(f(x), acc))
 }

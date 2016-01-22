@@ -109,5 +109,16 @@ object List {
 
   def prod3(l: List[Int]): Double = foldLeft(l, 1.0)(_ * _)
 
+  def reverse[A](l: List[A]): List[A] = {
+    @annotation.tailrec
+    def reverseIter[A](l: List[A], acc: List[A]): List[A] = {
+      l match {
+        case Nil => acc
+        case Cons(x, xs) => reverseIter(xs, Cons(x, acc))
+      }
+    }
+    reverseIter(l,Nil:List[A])
+  }
+
   def map[A, B](l: List[A])(f: A => B): List[B] = sys.error("todo")
 }

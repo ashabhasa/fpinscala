@@ -117,8 +117,10 @@ object List {
         case Cons(x, xs) => reverseIter(xs, Cons(x, acc))
       }
     }
-    reverseIter(l,Nil:List[A])
+    reverseIter(l, Nil: List[A])
   }
 
+  def reverse2[A](l: List[A]): List[A] = foldLeft(l, Nil: List[A])((acc, x) => Cons(x, acc))
+  
   def map[A, B](l: List[A])(f: A => B): List[B] = sys.error("todo")
 }

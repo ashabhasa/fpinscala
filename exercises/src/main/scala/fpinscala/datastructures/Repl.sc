@@ -1,4 +1,4 @@
-import fpinscala.datastructures.List
+import fpinscala.datastructures.{Cons, List, Nil}
 
 val l = List(1, 2, 3, 4, 5, 6)
 
@@ -11,3 +11,7 @@ List.setHead(l, 9)
 
 
 List.init(l)
+
+List.foldRight(List(1,2,3),Nil:List[Int]) (Cons(_,_))
+
+List.length(d)

@@ -126,5 +126,9 @@ object List {
     foldLeft(reverse(as), z)((b, a) => f(a, b))
   }
 
+  def appendViaFoldRight[A](a1: List[A], a2: List[A]): List[A] =
+    foldRight(a1, a2)((a, acc) => Cons(a, acc))
+
+
   def map[A, B](l: List[A])(f: A => B): List[B] = sys.error("todo")
 }

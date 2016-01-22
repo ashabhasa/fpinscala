@@ -24,3 +24,5 @@ List.prod3(l)
 List.reverse(l)
 List.reverse2(l)
 List.foldRightViaFoldLeft(l,0)(_+_)
+
+List.appendViaFoldRight(l,List(9,7))

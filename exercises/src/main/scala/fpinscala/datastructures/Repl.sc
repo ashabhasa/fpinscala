@@ -8,3 +8,6 @@ List.dropWhile(d)(i => i % 2 == 0)
 val dropwhile = List.dropWhile(l)(i => i % 2 == 0)
 
 List.setHead(l, 9)
+
+
+List.init(l)

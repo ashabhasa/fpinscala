@@ -6,3 +6,5 @@ val d: List[Int] = List.drop(l, 3)
 
 List.dropWhile(d)(i => i % 2 == 0)
 val dropwhile = List.dropWhile(l)(i => i % 2 == 0)
+
+List.setHead(l, 9)

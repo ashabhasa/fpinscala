@@ -152,10 +152,6 @@ object List {
   def filter2[A](l: List[A])(f: A => Boolean): List[A] =
     foldRight(l, Nil: List[A])((x, acc) => if (f(x)) Cons(x, acc) else acc)
 
-  def filter[A](l: List[A])(f: A => Boolean): List[A] = {
-    foldRight(l, Nil: List[A])((x, acc) => if (f(x)) Cons(x, acc) else acc)
-  }
-
   def flatMap[A, B](l: List[A])(f: A => List[B]): List[B] = {
     l match {
       case Nil => Nil: List[B]
@@ -171,7 +167,7 @@ object List {
     concatenate(map(l)(f))
   }
 
-  def filter2[A](l: List[A])(f: A => Boolean): List[A] = {
+  def filter3[A](l: List[A])(f: A => Boolean): List[A] = {
     flatMap(l)(x => if (f(x)) List(x) else Nil)
   }
 
@@ -202,7 +198,8 @@ object List {
     }
 
     val r = go(l, sub, Nil)
-    length(r) == length(sub)
+    println(r.toString)
+    reverse(r) == sub
   }
 }
 

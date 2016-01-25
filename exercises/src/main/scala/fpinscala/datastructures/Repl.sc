@@ -1,22 +1,20 @@
-import fpinscala.datastructures.{Cons, List, Nil}
+import fpinscala.datastructures.List
 
 val l = List(1, 2, 3, 4, 5, 6)
 
 val d: List[Int] = List.drop(l, 3)
 
-List.dropWhile(d)(i => i % 2 == 0)
-val dropwhile = List.dropWhile(l)(i => i % 2 == 0)
+def isEven(i: Int): Boolean = i % 2 == 0
+
+List.dropWhile(l)(isEven)
 
 List.setHead(l, 9)
 
-
 List.init(l)
-
 
 List.length(d)
 
 List.foldLeft(l, 0)((a, b) => a + b)
-
 
 List.sum3(l)
 List.prod3(l)
@@ -32,3 +30,5 @@ List.concatenate(List(List(1, 2, 3, 4, 5), List(9, 8, 7, 6)))
 List.addOne(l)
 
 List.map(l)(_ + 1)
+
+List.filter(l)(isEven)

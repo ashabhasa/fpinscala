@@ -140,6 +140,10 @@ object List {
       case Cons(x, xs) => Cons(f(x), map(xs)(f))
     }
 
+  def filter[A](l: List[A])(f: A => Boolean): List[A] = {
+    foldRight(l, Nil: List[A])((x, acc) => if (f(x)) Cons(x, acc) else acc)
+  }
+
 
   def mapViaFoldRight[A, B](l: List[A])(f: A => B): List[B] = foldRight(l, Nil: List[B])((x, acc) => Cons(f(x), acc))
 }

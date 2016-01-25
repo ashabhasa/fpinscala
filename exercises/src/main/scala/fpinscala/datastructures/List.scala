@@ -140,10 +140,24 @@ object List {
       case Cons(x, xs) => Cons(f(x), map(xs)(f))
     }
 
+  def mapViaFoldRight[A, B](l: List[A])(f: A => B): List[B] = foldRight(l, Nil: List[B])((x, acc) => Cons(f(x), acc))
+
   def filter[A](l: List[A])(f: A => Boolean): List[A] = {
     foldRight(l, Nil: List[A])((x, acc) => if (f(x)) Cons(x, acc) else acc)
   }
 
+  def flatMap[A, B](l: List[A])(f: A => List[B]): List[B] = {
+    l match {
+      case Nil => Nil: List[B]
+      case Cons(x, xs) => append(f(x), flatMap(xs)(f))
+    }
+  }
 
-  def mapViaFoldRight[A, B](l: List[A])(f: A => B): List[B] = foldRight(l, Nil: List[B])((x, acc) => Cons(f(x), acc))
+  def flatMap2[A, B](l: List[A])(f: A => List[B]): List[B] = {
+    foldRight(l, Nil: List[B])((x, xs) => append(f(x), xs))
+  }
+
+  def flatMap3[A, B](l: List[A])(f: A => List[B]): List[B] = {
+    concatenate(map(l)(f))
+  }
 }

@@ -5,7 +5,6 @@ val l = List(1, 2, 3, 4, 5, 6)
 val d: List[Int] = List.drop(l, 3)
 
 def isEven(i: Int): Boolean = i % 2 == 0
-
 List.dropWhile(l)(isEven)
 
 List.setHead(l, 9)
@@ -32,3 +31,7 @@ List.addOne(l)
 List.map(l)(_ + 1)
 
 List.filter(l)(isEven)
+
+List.flatMap(List(1,2,3))(i => List(i,i))
+List.flatMap2(List(1,2,3))(i => List(i,i))
+List.flatMap3(List(1,2,3))(i => List(i,i))

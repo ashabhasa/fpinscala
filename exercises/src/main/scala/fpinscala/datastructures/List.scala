@@ -164,4 +164,20 @@ object List {
   def filter2[A](l: List[A])(f: A => Boolean): List[A] = {
     flatMap(l)(x => if (f(x)) List(x) else Nil)
   }
+
+  def addTwoLists(l1: List[Int], l2: List[Int]): List[Int] = {
+    (l1, l2) match {
+      case (Nil, _) => Nil
+      case (_, Nil) => Nil
+      case (Cons(x1, t1), Cons(x2, t2)) => Cons(x1 + x2, addTwoLists(t1, t2))
+    }
+  }
+
+  def mapLists[A, B](l1: List[A], l2: List[A])(f: (A, A) => B): List[B] = {
+    (l1, l2) match {
+      case (Nil, _) => Nil
+      case (_, Nil) => Nil
+      case (Cons(x1, t1), Cons(x2, t2)) => Cons(f(x1, x2), mapLists(t1, t2)(f))
+    }
+  }
 }

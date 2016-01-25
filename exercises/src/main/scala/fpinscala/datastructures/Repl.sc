@@ -37,3 +37,8 @@ List.flatMap2(List(1,2,3))(i => List(i,i))
 List.flatMap3(List(1,2,3))(i => List(i,i))
 
 List.filter2(l)(isEven)
+
+List.addTwoLists(l,l)
+
+List.mapLists(l,l)(_ + _)
+List.mapLists(l,l)(_ * _)

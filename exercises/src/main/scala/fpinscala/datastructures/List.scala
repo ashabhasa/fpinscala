@@ -140,7 +140,6 @@ object List {
       case Cons(x, xs) => Cons(f(x), map(xs)(f))
     }
 
-
   def mapViaFoldRight[A, B](l: List[A])(f: A => B): List[B] = foldRight(l, Nil: List[B])((x, acc) => Cons(f(x), acc))
 
   def filter[A](l: List[A])(f: A => Boolean): List[A] =
@@ -153,4 +152,57 @@ object List {
   def filter2[A](l: List[A])(f: A => Boolean): List[A] =
     foldRight(l, Nil: List[A])((x, acc) => if (f(x)) Cons(x, acc) else acc)
 
+  def filter[A](l: List[A])(f: A => Boolean): List[A] = {
+    foldRight(l, Nil: List[A])((x, acc) => if (f(x)) Cons(x, acc) else acc)
+  }
+
+  def flatMap[A, B](l: List[A])(f: A => List[B]): List[B] = {
+    l match {
+      case Nil => Nil: List[B]
+      case Cons(x, xs) => append(f(x), flatMap(xs)(f))
+    }
+  }
+
+  def flatMap2[A, B](l: List[A])(f: A => List[B]): List[B] = {
+    foldRight(l, Nil: List[B])((x, xs) => append(f(x), xs))
+  }
+
+  def flatMap3[A, B](l: List[A])(f: A => List[B]): List[B] = {
+    concatenate(map(l)(f))
+  }
+
+  def filter2[A](l: List[A])(f: A => Boolean): List[A] = {
+    flatMap(l)(x => if (f(x)) List(x) else Nil)
+  }
+
+  def addTwoLists(l1: List[Int], l2: List[Int]): List[Int] = {
+    (l1, l2) match {
+      case (Nil, _) => Nil
+      case (_, Nil) => Nil
+      case (Cons(x1, t1), Cons(x2, t2)) => Cons(x1 + x2, addTwoLists(t1, t2))
+    }
+  }
+
+  def mapLists[A, B](l1: List[A], l2: List[A])(f: (A, A) => B): List[B] = {
+    (l1, l2) match {
+      case (Nil, _) => Nil
+      case (_, Nil) => Nil
+      case (Cons(x1, t1), Cons(x2, t2)) => Cons(f(x1, x2), mapLists(t1, t2)(f))
+    }
+  }
+
+  def hasSubsequence(l: List[Int], sub: List[Int]): Boolean = {
+
+    def go(l: List[Int], sub: List[Int], acc: List[Int]): List[Int] = {
+      (l, sub) match {
+        case (Nil, _) => acc
+        case (_, Nil) => acc
+        case (Cons(x1, t1), Cons(x2, t2)) => if (x1 == x2) go(t1, t2, Cons(x1, acc)) else go(t1, sub, Nil)
+      }
+    }
+
+    val r = go(l, sub, Nil)
+    length(r) == length(sub)
+  }
 }
+

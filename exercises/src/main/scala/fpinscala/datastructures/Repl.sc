@@ -1,12 +1,12 @@
-import fpinscala.datastructures.{Cons, List, Nil}
+import fpinscala.datastructures.List
 
 val l = List(1, 2, 3, 4, 5, 6)
 
 val d: List[Int] = List.drop(l, 3)
 
-val f: (Int) => Boolean = i => i % 2 == 0
-List.dropWhile(d)(f)
-val dropwhile = List.dropWhile(l)(f)
+def isEven(i: Int): Boolean = i % 2 == 0
+List.dropWhile(l)(isEven)
+
 List.setHead(l, 9)
 
 List.init(l)
@@ -24,5 +24,23 @@ List.concatenate(List(List(1, 2, 3, 4, 5), List(9, 8, 7, 6)))
 List.addOne(l)
 List.map(l)(_ + 1)
 
-List.filter(l)(f)
-List.filter2(l)(f)
+List.filter(l)(isEven)
+
+List.flatMap(List(1,2,3))(i => List(i,i))
+List.flatMap2(List(1,2,3))(i => List(i,i))
+List.flatMap3(List(1,2,3))(i => List(i,i))
+
+List.filter2(l)(isEven)
+
+List.addTwoLists(l,l)
+
+List.mapLists(l,l)(_ + _)
+List.mapLists(l,l)(_ * _)
+
+List.hasSubsequence(List(1, 2, 3, 4, 5),List(2,3))
+List.hasSubsequence(List(1, 2, 3, 4, 5),List(1))
+List.hasSubsequence(List(1, 2, 3, 4, 5),List(2,3,4))
+List.hasSubsequence(List(1, 2, 3, 4, 5),List(2,5))
+List.hasSubsequence(List(1, 2, 3, 4, 5),List(2,4))
+List.hasSubsequence(List(1, 2, 3, 4, 5),List(4))
+

@@ -35,3 +35,5 @@ List.filter(l)(isEven)
 List.flatMap(List(1,2,3))(i => List(i,i))
 List.flatMap2(List(1,2,3))(i => List(i,i))
 List.flatMap3(List(1,2,3))(i => List(i,i))
+
+List.filter2(l)(isEven)

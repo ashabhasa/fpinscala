@@ -42,3 +42,10 @@ List.addTwoLists(l,l)
 
 List.mapLists(l,l)(_ + _)
 List.mapLists(l,l)(_ * _)
+
+List.hasSubsequence(List(1, 2, 3, 4, 5),List(2,3))
+List.hasSubsequence(List(1, 2, 3, 4, 5),List(1))
+List.hasSubsequence(List(1, 2, 3, 4, 5),List(2,3,4))
+List.hasSubsequence(List(1, 2, 3, 4, 5),List(2,5))
+List.hasSubsequence(List(1, 2, 3, 4, 5),List(2,4))
+List.hasSubsequence(List(1, 2, 3, 4, 5),List(4))

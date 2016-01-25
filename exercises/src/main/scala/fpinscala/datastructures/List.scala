@@ -180,4 +180,19 @@ object List {
       case (Cons(x1, t1), Cons(x2, t2)) => Cons(f(x1, x2), mapLists(t1, t2)(f))
     }
   }
+
+  def hasSubsequence(l: List[Int], sub: List[Int]): Boolean = {
+
+    def go(l: List[Int], sub: List[Int], acc: List[Int]): List[Int] = {
+      (l, sub) match {
+        case (Nil, _) => acc
+        case (_, Nil) => acc
+        case (Cons(x1, t1), Cons(x2, t2)) => if (x1 == x2) go(t1, t2, Cons(x1, acc)) else go(t1, sub, Nil)
+      }
+    }
+
+    val r = go(l, sub, Nil)
+    length(r) == length(sub)
+  }
+
 }

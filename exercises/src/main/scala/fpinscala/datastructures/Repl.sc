@@ -1,4 +1,4 @@
-import fpinscala.datastructures.List
+import fpinscala.datastructures.{Branch, Leaf, List, Tree}
 
 val l = List(1, 2, 3, 4, 5, 6)
 
@@ -32,20 +32,29 @@ List.map(l)(_ + 1)
 
 List.filter(l)(isEven)
 
-List.flatMap(List(1,2,3))(i => List(i,i))
-List.flatMap2(List(1,2,3))(i => List(i,i))
-List.flatMap3(List(1,2,3))(i => List(i,i))
+List.flatMap(List(1, 2, 3))(i => List(i, i))
+List.flatMap2(List(1, 2, 3))(i => List(i, i))
+List.flatMap3(List(1, 2, 3))(i => List(i, i))
 
 List.filter2(l)(isEven)
 
-List.addTwoLists(l,l)
+List.addTwoLists(l, l)
 
-List.mapLists(l,l)(_ + _)
-List.mapLists(l,l)(_ * _)
+List.mapLists(l, l)(_ + _)
+List.mapLists(l, l)(_ * _)
 
-List.hasSubsequence(List(1, 2, 3, 4, 5),List(2,3))
-List.hasSubsequence(List(1, 2, 3, 4, 5),List(1))
-List.hasSubsequence(List(1, 2, 3, 4, 5),List(2,3,4))
-List.hasSubsequence(List(1, 2, 3, 4, 5),List(2,5))
-List.hasSubsequence(List(1, 2, 3, 4, 5),List(2,4))
-List.hasSubsequence(List(1, 2, 3, 4, 5),List(4))
+List.hasSubsequence(List(1, 2, 3, 4, 5), List(2, 3))
+List.hasSubsequence(List(1, 2, 3, 4, 5), List(1))
+List.hasSubsequence(List(1, 2, 3, 4, 5), List(2, 3, 4))
+List.hasSubsequence(List(1, 2, 3, 4, 5), List(2, 5))
+List.hasSubsequence(List(1, 2, 3, 4, 5), List(2, 4))
+List.hasSubsequence(List(1, 2, 3, 4, 5), List(4))
+
+val tree =
+  Branch(left = Branch(left = Branch(left = Leaf(1), right = Branch(left = Branch(left = Leaf(4), right = Branch(left = Leaf(9), right = Leaf(8))),
+    right = Leaf(3))),
+                       right = Leaf(10)),
+         right = Branch(left = Leaf(5), right = Leaf(6)))
+Tree.size(tree)
+Tree.maximum(tree)
+Tree.depth(tree)

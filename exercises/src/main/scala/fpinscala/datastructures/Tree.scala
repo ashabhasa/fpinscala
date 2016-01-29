@@ -20,8 +20,26 @@ object Tree {
   }
 
   def depth[A](t: Tree[A]): Int = t match {
-    case Branch(l, r) => (1 + depth(l)) max (1 + depth(r))
+    case Branch(l, r) => 1 + (depth(l) max depth(r))
     case Leaf(_) => 1
   }
+
+  def map[A, B](t: Tree[A])(f: A => B): Tree[B] = t match {
+    case Leaf(v) => Leaf(f(v))
+    case Branch(l, r) => Branch(map(l)(f), map(r)(f))
+  }
+
+  def fold[A, B](t: Tree[A])(f: A => B)(g: (B, B) => B): B = t match {
+    case Leaf(v) => f(v)
+    case Branch(l, r) => g(fold(l)(f)(g), fold(r)(f)(g))
+  }
+
+  def size2[A](t: Tree[A]): Int = fold(t)(_ => 1)(_ + _ + 1)
+
+  def maximum2(t: Tree[Int]): Int = fold(t)(v => v)((l, r) => l max r)
+
+  def depth2[A](t: Tree[A]): Int = fold(t)(_ => 1)((l, r) => 1 + (l max r))
+
+  def map2[A, B](t: Tree[A])(f: A => B): Tree[B] = fold(t)(v => Leaf(f(v)) : Tree[B])((l, r) => Branch(l, r))
 
 }

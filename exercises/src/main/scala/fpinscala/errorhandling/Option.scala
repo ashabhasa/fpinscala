@@ -73,9 +73,13 @@ object Option {
 
   def map2[A, B, C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] = {
     (a, b) match {
-      case (Some(a), Some(b)) => Some(f(a, b))
+      case (Some(x), Some(y)) => Some(f(x, y))
       case _ => None
     }
+  }
+
+  def map21[A, B, C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] = {
+    a.flatMap(a1 => b.map(b1 => f(a1, b1)))
   }
 
   def sequence[A](a: List[Option[A]]): Option[List[A]] = sys.error("todo")

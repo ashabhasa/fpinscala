@@ -1,6 +1,8 @@
 package fpinscala.errorhandling
 
 
+import java.util.regex.{Pattern, PatternSyntaxException}
+
 import scala.{Either => _, Option => _, Some => _}
 
 // hide std library `Option`, `Some` and `Either`, since we are writing our own in this chapter
@@ -80,6 +82,20 @@ object Option {
 
   def map21[A, B, C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] = {
     a.flatMap(a1 => b.map(b1 => f(a1, b1)))
+  }
+
+  def pattern(s: String): Option[Pattern] =
+    try {
+      Some(Pattern.compile(s))
+    } catch {
+      case e: PatternSyntaxException => None
+    }
+
+  def mkMatcher(pat: String): Option[String => Boolean] =
+    pattern(pat) map (p => (s: String) => p.matcher(s).matches)
+
+  def bothMatch_2(pat1: String, pat2: String, s: String): Option[Boolean] = {
+    map2(mkMatcher(pat1), mkMatcher(pat2))((a, b) => a(s) && b(s))
   }
 
   def sequence[A](a: List[Option[A]]): Option[List[A]] = sys.error("todo")

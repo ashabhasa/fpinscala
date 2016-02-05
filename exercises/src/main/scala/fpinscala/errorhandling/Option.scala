@@ -14,7 +14,7 @@ sealed trait Option[+A] {
   }
 
   def getOrElse[B >: A](default: => B): B = this match {
-    case Some(_) => _
+    case Some(a) => a
     case _ => default
   }
 
@@ -30,7 +30,7 @@ sealed trait Option[+A] {
     case _ => ob
   }
 
-  def orElse[B >: A](ob: => Option[B]): Option[B] = this.map(x => Some(x)) getOrElse (ob)
+  def orElse2[B >: A](ob: => Option[B]): Option[B] = this.map(x => Some(x)) getOrElse ob
 
   def filter(f: A => Boolean): Option[A] = this match {
     case Some(x) if f(x) => Some(x)
@@ -73,16 +73,14 @@ object Option {
   def variance(xs: Seq[Double]): Option[Double] =
     mean(xs) flatMap (m => mean(xs.map(x => Math.pow(x - m, 2))))
 
-  def map2[A, B, C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] = {
-    (a, b) match {
-      case (Some(x), Some(y)) => Some(f(x, y))
-      case _ => None
-    }
+  def map2[A, B, C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] = (a, b) match {
+    case (Some(x), Some(y)) => Some(f(x, y))
+    case _ => None
   }
 
-  def map21[A, B, C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] = {
+  def map21[A, B, C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] =
     a.flatMap(a1 => b.map(b1 => f(a1, b1)))
-  }
+
 
   def pattern(s: String): Option[Pattern] =
     try {
@@ -94,11 +92,12 @@ object Option {
   def mkMatcher(pat: String): Option[String => Boolean] =
     pattern(pat) map (p => (s: String) => p.matcher(s).matches)
 
-  def bothMatch_2(pat1: String, pat2: String, s: String): Option[Boolean] = {
+  def bothMatch_2(pat1: String, pat2: String, s: String): Option[Boolean] =
     map2(mkMatcher(pat1), mkMatcher(pat2))((a, b) => a(s) && b(s))
-  }
 
-  def sequence[A](a: List[Option[A]]): Option[List[A]] = sys.error("todo")
+  def sequence[A](a: List[Option[A]]): Option[List[A]] = {
+    a.foldRight(Some(Nil): Option[List[A]]) { (oi, ol) => ol.flatMap(l => oi.map(i => l.::(i))) }
+  }
 
   def traverse[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] = sys.error("todo")
 }

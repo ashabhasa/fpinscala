@@ -95,9 +95,14 @@ object Option {
   def bothMatch_2(pat1: String, pat2: String, s: String): Option[Boolean] =
     map2(mkMatcher(pat1), mkMatcher(pat2))((a, b) => a(s) && b(s))
 
-  def sequence[A](a: List[Option[A]]): Option[List[A]] = {
+  def sequence[A](a: List[Option[A]]): Option[List[A]] =
     a.foldRight(Some(Nil): Option[List[A]]) { (oi, ol) => ol.flatMap(l => oi.map(i => l.::(i))) }
-  }
 
-  def traverse[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] = sys.error("todo")
+  def sequence2[A](a: List[Option[A]]): Option[List[A]] =
+    a.foldRight[Option[List[A]]](Some(Nil))((x, y) => map2(x, y)(_ :: _))
+
+  def traverse[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] = sequence(a map f)
+
+  def traverse2[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] =
+    a.foldRight[Option[List[B]]](Some(Nil))((i, b) => map2(f(i), b)(_ :: _))
 }

@@ -31,16 +31,29 @@ object RNG {
       (f(a), rng2)
     }
 
+  def mapExpanded[A, B](s: RNG => (A, RNG))(f: A => B): RNG => (B, RNG) =
+    rng => {
+      val (a, rng2) = s(rng)
+      (f(a), rng2)
+    }
+
   def nonNegativeInt(rng: RNG): (Int, RNG) = rng.nextInt match {
     case (i, r) if i < 0 => (-(i + 1), r)
     case (i, r) => (i, r)
   }
 
+  def nonNegativeIntWithMap: Rand[Int] = map(rng => rng.nextInt) { r =>
+    if (r < 0) {
+      -(r + 1)
+    } else r
+  }
 
   def double(rng: RNG): (Double, RNG) = {
     val (rand, newRng) = nonNegativeInt(rng)
     (rand / (Int.MaxValue.toDouble + 1), newRng)
   }
+
+  def doubleWithMap: Rand[Double] = map(nonNegativeInt)(r => r / (Int.MaxValue.toDouble + 1))
 
   def intDouble(rng: RNG): ((Int, Double), RNG) = {
     val (i, rng1) = nonNegativeInt(rng)
@@ -48,10 +61,14 @@ object RNG {
     ((i, d), rng2)
   }
 
+  def intDoubleWithMap: Rand[(Int, Double)] = both(nonNegativeInt, double)
+
   def doubleInt(rng: RNG): ((Double, Int), RNG) = {
     val ((i, d), rng1) = intDouble(rng)
     ((d, i), rng1)
   }
+
+  def doubleIntWithMap: Rand[(Double, Int)] = both(double, nonNegativeInt)
 
   def double3(rng: RNG): ((Double, Double, Double), RNG) = {
     val (d1, rng1) = double(rng)
@@ -70,22 +87,32 @@ object RNG {
     }
   }
 
-  def nonNegativeEven: Rand[Int] = {
-    map(nonNegativeInt)(r => r - r % 2)
+  def intsWithSequence(count: Int): Rand[List[Int]] = {
+    val p  = List.fill(count)(nonNegativeIntWithMap)
+    sequence(p)
   }
 
-  def map2[A, B, C](ra: Rand[A], rb: Rand[B])(f: (A, B) => C): Rand[C] = {
+  def nonNegativeEven: Rand[Int] = map(nonNegativeInt)(r => r - r % 2)
+
+
+  def map2[A, B, C](ra: Rand[A], rb: Rand[B])(f: (A, B) => C): Rand[C] =
     rng => {
       val (a, rngA) = ra(rng)
       val (b, rngB) = rb(rngA)
       (f(a, b), rngB)
     }
-  }
+
 
   def both[A, B](ra: Rand[A], rb: Rand[B]): Rand[(A, B)] =
     map2(ra, rb)((_, _))
 
-  def sequence[A](fs: List[Rand[A]]): Rand[List[A]] = ???
+  def sequence[A](fs: List[Rand[A]]): Rand[List[A]] = {
+    fs.foldLeft(unit(List[A]())) { (rl, r) =>
+      map2(r, rl) { (a, as) =>
+        a :: as
+      }
+    }
+  }
 
   def flatMap[A, B](f: Rand[A])(g: A => Rand[B]): Rand[B] = ???
 }

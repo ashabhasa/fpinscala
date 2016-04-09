@@ -125,6 +125,22 @@ object RNG {
       unit(mod)
     else nonNegativeLessThan(n)
   })
+
+  def _map[A, B](s: Rand[A])(f: A => B): Rand[B] = flatMap(s)(a => unit(f(a)))
+
+  def _map2[A, B, C](ra: Rand[A], rb: Rand[B])(f: (A, B) => C): Rand[C] = flatMap(ra) {
+    a => _map(rb) { b => f(a, b) }
+  }
+
+
+  //  rng => {
+  //    val (a, rngA) = ra(rng)
+  //    val (b, rngB) = rb(rngA)
+  //    (f(a, b), rngB)
+  //  }
+
+
+  def rollDie = map(nonNegativeLessThan(6))(_ + 1)
 }
 
 case class State[S, +A](run: S => (A, S)) {

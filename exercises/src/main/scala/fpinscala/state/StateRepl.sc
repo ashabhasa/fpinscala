@@ -17,6 +17,9 @@ RNG.intsWithSequence(6)(rng)._1
 RNG.nonNegativeInt(rng)._1
 RNG.nonNegativeIntWithMap(rng)._1
 
+RNG.nonNegativeLessThan(6)(Simple(5))._1
 
+RNG.rollDie(Simple(1))._1
 
-
+RNG._map(RNG.ints(6))(a => a.sum)(rng)._1
+RNG.map(RNG.ints(6))(a => a.sum)(rng)._1

@@ -132,26 +132,34 @@ object RNG {
     a => _map(rb) { b => f(a, b) }
   }
 
-
-  //  rng => {
-  //    val (a, rngA) = ra(rng)
-  //    val (b, rngB) = rb(rngA)
-  //    (f(a, b), rngB)
-  //  }
-
-
   def rollDie = map(nonNegativeLessThan(6))(_ + 1)
 }
 
 case class State[S, +A](run: S => (A, S)) {
   def map[B](f: A => B): State[S, B] =
-    sys.error("todo")
+    State(s => {
+      val (a, s1) = run(s)
+      (f(a), s1)
+    })
+
+  def _map[B](f: A => B): State[S, B] = flatMap(a => unit(f(a)))
 
   def map2[B, C](sb: State[S, B])(f: (A, B) => C): State[S, C] =
-    sys.error("todo")
+    State(s => {
+      val (a, s1) = run(s)
+      val (b, s2) = sb.run(s1)
+      (f(a, b), s2)
+    })
+
+  def _map2[B, C](sb: State[S, B])(f: (A, B) => C): State[S, C] = flatMap(a => sb.map(b => f(a, b)))
 
   def flatMap[B](f: A => State[S, B]): State[S, B] =
-    sys.error("todo")
+    State(s => {
+      val (a, s1) = run(s)
+      f(a).run(s1)
+    })
+
+  def unit[A](a: A): State[S, A] = State(s => (a, s))
 }
 
 sealed trait Input

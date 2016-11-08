@@ -57,6 +57,16 @@ object Par {
 
   def asyncF[A, B](f: A => B): A => Par[B] = a => lazyUnit(f(a))
 
+  def parMap[A, B](ls: List[A])(f: A => B): Par[List[B]] = {
+    sequence(ls.map(asyncF(f)))
+  }
+
+  def sequence[A](a: List[Par[A]]): Par[List[A]] =
+    a.foldRight(unit(List.empty[A])) { (par, lst) =>
+      map2(par, lst)((el, list) => el :: list)
+//      map2(par, lst)(_::_)
+    }
+
   /* Gives us infix syntax for `Par`. */
   implicit def toParOps[A](p: Par[A]): ParOps[A] = new ParOps(p)
 

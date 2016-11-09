@@ -36,6 +36,8 @@ object Par {
       def call = a(es).get
     })
 
+  def fork2[A](a: => Par[A]) : Par[A] = es => a(es)
+
   def map[A, B](pa: Par[A])(f: A => B): Par[B] =
     map2(pa, unit(()))((a, _) => f(a))
 
@@ -64,8 +66,14 @@ object Par {
   def sequence[A](a: List[Par[A]]): Par[List[A]] =
     a.foldRight(unit(List.empty[A])) { (par, lst) =>
       map2(par, lst)((el, list) => el :: list)
-//      map2(par, lst)(_::_)
+      //      map2(par, lst)(_::_)
     }
+
+  def parFilter[A](as: List[A])(f: A => Boolean): Par[List[A]] = {
+    as.foldRight(unit(List.empty[A])) { (a, acc) =>
+      if (f(a)) map(acc)(a :: _) else acc
+    }
+  }
 
   /* Gives us infix syntax for `Par`. */
   implicit def toParOps[A](p: Par[A]): ParOps[A] = new ParOps(p)

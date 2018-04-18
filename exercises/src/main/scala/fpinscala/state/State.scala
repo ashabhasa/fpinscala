@@ -180,22 +180,22 @@ object State {
 
   def unit[S, A](a: A): State[S, A] = State(s => (a, s))
 
-  def sequence[S, A](fs: List[State[S, A]]): State[S, List[A]] = {
-    fs.foldLeft(unit(List[A]())){ (r,s) =>
-      s.map2(r) {(b,c) =>
-
-      }
-    }
-    ???
-  }
-
-  def sequence[A](fs: List[Rand[A]]): Rand[List[A]] = {
-    fs.foldLeft(unit(List[A]())) { (rl, r) =>
-      map2(r, rl) { (a, as) =>
-        a :: as
-      }
-    }
-  }
+//  def sequence[S, A](fs: List[State[S, A]]): State[S, List[A]] = {
+//    fs.foldLeft(unit(List[A]())){ (r,s) =>
+//      s.map2(r) {(b,c) =>
+//
+//      }
+//    }
+//    ???
+//  }
+//
+//  def sequence[A](fs: List[Rand[A]]): Rand[List[A]] = {
+//    fs.foldLeft(unit(List[A]())) { (rl, r) =>
+//      map2(r, rl) { (a, as) =>
+//        a :: as
+//      }
+//    }
+//  }
 
   def simulateMachine(inputs: List[Input]): State[Machine, (Int, Int)] = ???
 }

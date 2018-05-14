@@ -54,7 +54,39 @@ object Par {
     ps.fold(unit(Option.empty[A]))(map(_)(Some(_)))
 
 
+  def choiceN[A](n: Par[Int])(choices: List[Par[A]]): Par[A] = es =>
+    choices(n(es).get())(es)
 
+  def choice2[A](cond: Par[Boolean])(t: Par[A], f: Par[A]): Par[A] =
+    choiceN(map(cond)(if (_) 0 else 1))(List(t, f))
+
+  def choiceMap[K, V](key: Par[K])(choice: Map[K, Par[V]]): Par[V] = es =>
+    choice(key(es).get())(es)
+
+  def chooser[A, B](pa: Par[A])(f: A => Par[B]): Par[B] = es =>
+    f(pa(es).get)(es)
+
+  def flatMap[A, B](pa: Par[A])(f: A => Par[B]): Par[B] = es =>
+    f(pa(es).get)(es)
+
+  def choice3[A](cond: Par[Boolean])(t: Par[A], f: Par[A]): Par[A] =
+    flatMap(cond)(if (_) t else f)
+
+  def choiceN1[A](n: Par[Int])(choices: List[Par[A]]): Par[A] =
+    flatMap(n)(choices)
+
+  def choiceMap1[K, V](key: Par[K])(choices: Map[K, Par[V]]): Par[V] =
+    flatMap(key)(choices)
+
+  def join[A](a:Par[Par[A]]): Par[A] = es =>
+    a(es).get()(es)
+
+  def flatMapWithJoin[A,B](pa:Par[A])(f:A=>Par[B]) = {
+    join(map(pa)(f))
+  }
+
+  def joinWithFlatMap[A](a: Par[Par[A]]): Par[A] =
+    flatMap(a)(pa => pa)
 
   def sequence[F[_],P[_], A](fpa:F[P[A]]):P[F[A]] = {
 
